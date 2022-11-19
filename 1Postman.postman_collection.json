@@ -1,0 +1,59 @@
+{
+	"info": {
+		"_postman_id": "d44f2fe2-68c8-46bf-93cc-89a3e5ca79b2",
+		"name": "Обучение  Postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23288719"
+	},
+	"item": [
+		{
+			"name": "Регистрация пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"все прекрасно\",\r",
+							"function() {pm.response.to.have.status(200 );}\r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://users.bugred.ru/tasks/rest/doregister?email=kotik@kotic.ru&name=Демо1&password=1",
+					"protocol": "http",
+					"host": [
+						"users",
+						"bugred",
+						"ru"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"doregister"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "kotik@kotic.ru"
+						},
+						{
+							"key": "name",
+							"value": "Демо1"
+						},
+						{
+							"key": "password",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
