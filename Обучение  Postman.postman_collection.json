@@ -499,6 +499,106 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Ствтус коды на поиск сотрудников",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//никого не нашли по запросу, пустой ответ\r",
+							"pm.test(\"Тут нет никого\", function () {\r",
+							"    pm.response.to.have.status(230);\r",
+							"});\r",
+							"//найден 1 юзер\r",
+							"pm.test(\"Совсем один\", function () {\r",
+							"    pm.response.to.have.status(231);\r",
+							"});\r",
+							"//найдено больше 1 юзера (но без компаний)\r",
+							"pm.test(\"Толпа безработных\", function () {\r",
+							"    pm.response.to.have.status(232);\r",
+							"});\r",
+							"//найдена 1 компания\r",
+							"pm.test(\"Нашли работящего\", function () {\r",
+							"    pm.response.to.have.status(233);\r",
+							"});\r",
+							"//найдено больше 1 компании (но без юзеров)\r",
+							"pm.test(\"Работы куча,а кто работать будет\", function () {\r",
+							"    pm.response.to.have.status(234);\r",
+							"});\r",
+							"//найдены как юзеры, так и компании\r",
+							"pm.test(\"Вот они , работнички\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "query",
+							"value": "aa+1@mail.com",
+							"type": "text"
+						},
+						{
+							"key": "partyType",
+							"value": "USER",
+							"type": "text"
+						},
+						{
+							"key": "fullSimilarity",
+							"value": "False",
+							"type": "text"
+						},
+						{
+							"key": "taskStatus",
+							"value": "ALL",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://users.bugred.ru/tasks/rest/magicsearch",
+					"protocol": "http",
+					"host": [
+						"users",
+						"bugred",
+						"ru"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": ".ru",
+							"disabled": true
+						},
+						{
+							"key": "partyType",
+							"value": "COMPANY",
+							"disabled": true
+						},
+						{
+							"key": "taskStatus",
+							"value": "COMPLETE",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
