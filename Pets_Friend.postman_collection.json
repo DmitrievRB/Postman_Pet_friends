@@ -1,0 +1,533 @@
+{
+	"info": {
+		"_postman_id": "e54ce7fd-5c64-48f1-93c3-d21ed847eae8",
+		"name": "Pets_Friend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23288719"
+	},
+	"item": [
+		{
+			"name": "Practic8",
+			"item": [
+				{
+					"name": "Get_Api_Key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Запись key  ответа в переменную auth_id\", function () {\r",
+									"    var jsoanData = JSON.parse(responseBody);\r",
+									"    pm.collectionVariables.set(\"auth_key\",jsoanData.key);\r",
+									"    \r",
+									"    console.log(jsoanData.key)\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "email",
+								"value": "{{email}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}//api/key",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"",
+								"api",
+								"key"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Pet_Simple",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Записываем полученый id в переменные\", function () {\r",
+									"  var jsonDate= JSON.parse(responseBody)\r",
+									"pm.collectionVariables.set(\"pet_id\", jsonDate.id);\r",
+									"console.log(jsonDate.id);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"    pm.test(\"Записываем полученое имя в переменную name\", function () {\r",
+									"        var jsonDate=JSON.parse(responseBody);\r",
+									"     pm.collectionVariables.set(\"name\",jsonDate.name);\r",
+									"     console.log(jsonDate.name);\r",
+									"\r",
+									"    });\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "{{name}}",
+									"type": "text"
+								},
+								{
+									"key": "animal_type",
+									"value": "{{animal_type}}",
+									"type": "text"
+								},
+								{
+									"key": "age",
+									"value": "{{age}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/api/create_pet_simple",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"create_pet_simple"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get_List_Pets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Соответствие name переменной и ответа\", function () {\r",
+									"   var jsonDate=JSON.parse(responseBody)\r",
+									"   pm.expect(pm.collectionVariables.get(\"name\")).to.eql(jsonDate.pets[0].name);\r",
+									"   console.log(pm.collectionVariables.get(\"name\"));\r",
+									"  console.log(jsonDate.pets[0].name);\r",
+									"});\r",
+									"\r",
+									"//console.log(jsonDate.pets[0].id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "auth_key",
+								"value": "{{auth_key}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/api/pets?filter=my_pets",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"pets"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "my_pets"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update_Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Проверка смены имени\", function () {\r",
+									"    var jsonDate=JSON.parse(responseBody);\r",
+									"  pm.expect(pm.collectionVariables.get(\"name\")).to.not.eql(jsonDate.name) ;\r",
+									"  console.log(pm.collectionVariables.get(\"name\"));\r",
+									"  console.log(jsonDate.name);\r",
+									"  pm.collectionVariables.set(\"name\",jsonDate.name);\r",
+									"\r",
+									"  \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "{{new_name}}",
+									"type": "text"
+								},
+								{
+									"key": "animal_type",
+									"value": "{{animal_type}}",
+									"type": "text"
+								},
+								{
+									"key": "age",
+									"value": "{{age}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/api/pets/{{pet_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"pets",
+								"{{pet_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Add_Pet_RandomVar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Записываем полученый id в переменные\", function () {\r",
+							"  var jsonDate= JSON.parse(responseBody)\r",
+							"pm.collectionVariables.set(\"pet_id\", jsonDate.id);\r",
+							"console.log(jsonDate.id);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"    pm.test(\"Записываем полученое имя в переменную name\", function () {\r",
+							"        var jsonDate=JSON.parse(responseBody);\r",
+							"     pm.collectionVariables.set(\"name\",jsonDate.name);\r",
+							"     console.log(jsonDate.name);\r",
+							"\r",
+							"    });\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "{{$randomFirstName}}",
+							"type": "text"
+						},
+						{
+							"key": "animal_type",
+							"value": "{{$randomJobType}}",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "{{$randomInt}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/api/create_pet_simple",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"create_pet_simple"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ChekMyPets",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//console.log(jsonDate.pets[0].id);\r",
+							"pm.test(\"Записываем id\", function () {\r",
+							"   let jsonDate=pm.response.json();\r",
+							"   pm.collectionVariables.set(\"pet_id\",jsonDate.pets[0].id);\r",
+							"\r",
+							"\r",
+							"   console.log(jsonDate);\r",
+							"    console.log(jsonDate.pets[11].id);\r",
+							"   console.log(jsonDate.pets[jsonDate.pets.lenght-1].id);\r",
+							"\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "auth_key",
+						"value": "{{auth_key}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/api/pets?filter=my_pets",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"pets"
+					],
+					"query": [
+						{
+							"key": "filter",
+							"value": "my_pets"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MyPetsJava",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    let jsonDate=pm.response.json()\r",
+							"    console.log(jsonDate);\r",
+							"    let all_e=jsonDate.pets.length;\r",
+							"    console.log(all_e);\r",
+							"    //Перебираем все значения с шагом 1\r",
+							"    for (let i = 0; i < all_e; i++ ) {\r",
+							"        //Если имя в шаге = \"Жужик\"\r",
+							"    if(jsonDate.pets[i].name == \"Жужик\") {\r",
+							"        //выводим id в консоль\r",
+							"        console.log(jsonDate.pets[i].id)\r",
+							"    }\r",
+							"    }\r",
+							"    }\r",
+							"    \r",
+							");\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "auth_key",
+						"value": "{{auth_key}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/api/pets?filter=my_pets",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"pets"
+					],
+					"query": [
+						{
+							"key": "filter",
+							"value": "my_pets"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete_Last_Pet",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/pets/{{pet_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"pets",
+						"{{pet_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{auth_key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "auth_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "https://petfriends.skillfactory.ru",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "hhjob1@yandex.ru",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "p@hfnecnhf1",
+			"type": "string"
+		},
+		{
+			"key": "auth_key",
+			"value": ""
+		},
+		{
+			"key": "pet_id",
+			"value": ""
+		},
+		{
+			"key": "name",
+			"value": "Аяврик",
+			"type": "string"
+		},
+		{
+			"key": "animal_type",
+			"value": "dog",
+			"type": "string"
+		},
+		{
+			"key": "age",
+			"value": "7",
+			"type": "string"
+		},
+		{
+			"key": "new_name",
+			"value": "Серый",
+			"type": "string"
+		}
+	]
+}
