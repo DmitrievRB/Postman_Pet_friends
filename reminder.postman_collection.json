@@ -1,0 +1,374 @@
+{
+	"info": {
+		"_postman_id": "80b2cfb5-04d1-412b-9b65-6174f22a0ca9",
+		"name": "reminder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23288719"
+	},
+	"item": [
+		{
+			"name": "Get_API_key",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Если в ответе есть ключ key, то записать его значение в auth_key\",function(){\r",
+							"    var jsonData=JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.have.all.keys(\"key\");\r",
+							"    pm.collectionVariables.set(\"auth_key\",jsonData.key);\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "email",
+						"value": "grant@gmail.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "grant",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/api/key",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"key"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_pet_simple",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Запись переменную коллекции pet_id,name,age \",function(){\r",
+							"    var jsonData=JSON.parse(responseBody);\r",
+							"    pm.collectionVariables.set(\"petid\",jsonData.id);\r",
+							"    pm.collectionVariables.set(\"name\",jsonData.name);\r",
+							"    pm.collectionVariables.set(\"age\",jsonData.age)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "{{name}}",
+							"type": "text"
+						},
+						{
+							"key": "animal_type",
+							"value": "{{animal_type}}",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "{{age}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/api/create_pet_simple",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"create_pet_simple"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create_pet_photo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "{{name}}",
+							"type": "text"
+						},
+						{
+							"key": "animal_type",
+							"value": "{{animal_type}}",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "{{age}}",
+							"type": "text"
+						},
+						{
+							"key": "pet_photo",
+							"type": "file",
+							"src": "/C:/Users/merlinrd/Documents/MyProject/Python_Training/pet_freiend/tests/images/images.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/api/pets",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"pets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update_name_pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Сохраняем новое имя в коллекции\",function(){\r",
+							"    var jsonDate=JSON.parse(responseBody);\r",
+							"    pm.collectionVariables.set(\"name\",jsonDate.name);\r",
+							"    pm.collectionVariables.set(\"animal_type\",jsonDate.animal_type);\r",
+							"    pm.collectionVariables.set(\"age\",jsonDate.age);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Лазарь",
+							"type": "text"
+						},
+						{
+							"key": "animal_type",
+							"value": "кот",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "5",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/api/pets/{{petid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"pets",
+						"{{petid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "My_pet_list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Получение pet_id последнего созданого питомца my_pets\",function(){\r",
+							"    var jsonDate=JSON.parse(responseBody);\r",
+							"    pm.expect(pm.collectionVariables.get(\"petid\")).to.eql(jsonDate.pets[0].id);\r",
+							"});\r",
+							"pm.test(\"Сравниваем name из запроса с name из переменной коллекции\",function(){    \r",
+							"    pm.expect(pm.response.text()).to.include(pm.collectionVariables.get(\"name\"));\r",
+							"    \r",
+							"});\r",
+							"pm.test(\"Сравниваем name из запроса с name из переменной коллекции\",function(){    \r",
+							"    pm.expect(pm.response.text()).to.include(\"Graf\");\r",
+							"    \r",
+							"});\r",
+							"pm.test(\"Запись pet_id последнего созданого питомца в переменные коллекции\",function(){\r",
+							"    var jsonDate=JSON.parse(responseBody);\r",
+							"    pm.collectionVariables.set(\"petid\",jsonDate.pets[0].id);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/pets?filter=my_pets",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"pets"
+					],
+					"query": [
+						{
+							"key": "filter",
+							"value": "my_pets"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete_pet",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/pets/{{petid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"pets",
+						"{{petid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add_pet_photo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "pet_photo",
+							"type": "file",
+							"src": "/C:/Users/merlinrd/Documents/MyProject/Python_Training/pet_friends/tests/images/muh.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/api/pets/set_photo/{{petid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"pets",
+						"set_photo",
+						"{{petid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{auth_key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "auth_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "https://petfriends.skillfactory.ru/",
+			"type": "string"
+		},
+		{
+			"key": "name",
+			"value": "Мухтар",
+			"type": "string"
+		},
+		{
+			"key": "animal_type",
+			"value": "Собака",
+			"type": "string"
+		},
+		{
+			"key": "petid",
+			"value": ""
+		},
+		{
+			"key": "age",
+			"value": ""
+		},
+		{
+			"key": "auth_key",
+			"value": ""
+		}
+	]
+}
